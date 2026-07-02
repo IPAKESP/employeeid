@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Employee ID Card Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Fira+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    
+    <style>
+        body {
+            font-family: 'Fira Sans', sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            flex-direction: column;
+        }
+
+        .controls {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .controls input {
+            padding: 10px;
+            font-size: 16px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+            font-family: 'Fira Sans', sans-serif;
+        }
+
+        .controls button {
+            padding: 10px 20px;
+            font-size: 16px;
+            color: white;
+            background-color: #387c47;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-weight: 600;
+            font-family: 'Fira Sans', sans-serif;
+        }
+
+        /* --- EXACT CARD DESIGN WITH BACKGROUND IMAGE --- */
+        .card-container {
+            width: 380px;
+            height: 608px;
+            position: relative;
+            /* Yahan humne exact PDF/Image ko background bana diya hai */
+            background-image: url('card-bg.jpg');
+            background-size: 100% 100%;
+            background-position: center;
+            background-repeat: no-repeat;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            background-color: white;
+        }
+
+        /* Photo Area - Adjusted to perfectly hide the grey box */
+        .photo-container {
+            position: absolute;
+            top: 114px; /* Aap is value ko kam/zyada kar k up/down set kar saktay hain */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 200px; /* Grey box ki exact width */
+            height: 200px; /* Grey box ki exact height */
+            border-radius: 14px; /* Exact rounded corners */
+            overflow: hidden;
+            z-index: 10;
+        }
+
+        .photo-container img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        /* Text Section */
+        .text-section {
+            position: absolute;
+            top: 355px; /* Name aur details ko up/down yahan se karein */
+            width: 100%;
+            text-align: center;
+            z-index: 10;
+        }
+
+        .emp-name {
+            font-family: 'Bebas Neue', sans-serif;
+            color: #3f7b47;
+            font-size: 46px;
+            font-weight: 400;
+            text-transform: uppercase;
+            margin: 0;
+            letter-spacing: 1px;
+            line-height: 1.1;
+        }
+
+        .emp-title {
+            font-family: 'Fira Sans', sans-serif;
+            color: #2b2b2b;
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: uppercase;
+            margin: 2px 0 25px 0;
+            letter-spacing: 0.5px;
+        }
+
+        /* Details Table */
+        .details-table {
+            margin: 0 auto;
+            text-align: left;
+            font-size: 15px;
+            color: #333;
+            border-spacing: 0 8px; 
+        }
+
+        .details-table td {
+            padding: 0 8px;
+        }
+
+        .details-table td:first-child {
+            font-weight: 700;
+            color: #2b2b2b;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="controls">
+        <input type="text" id="inputId" placeholder="Enter Employee ID (e.g. 1011)">
+        <button onclick="generateCard()">Generate Card</button>
+        <button onclick="downloadCard()" style="background-color: #8bc63f; color: #111;">Download High-Res</button>
+    </div>
+
+    <div class="card-container" id="idCard">
+        
+        <div class="photo-container">
+            <img id="cardPhoto" src="https://via.placeholder.com/200?text=Photo+Here" alt="Employee Photo">
+        </div>
+
+        <div class="text-section">
+            <h1 class="emp-name" id="cardName">ANSER ALI SHAH</h1>
+            <p class="emp-title" id="cardDesignation">MANAGER PLANNING</p>
+            
+            <table class="details-table">
+                <tr>
+                    <td>Employee ID</td>
+                    <td>:</td>
+                    <td id="cardEmpId">1011</td>
+                </tr>
+                <tr>
+                    <td>Department</td>
+                    <td>:</td>
+                    <td id="cardDepartment">Planning & Dispatch</td>
+                </tr>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnbrul58r8BMQrtwQUQrMG1lFv9EMJubGGnCSDOrO-41l2z2j2VhM3NraYEenbGT5rxuL3AN0qVbvl/pub?output=csv';
+
+        async function generateCard() {
+            const empIdInput = document.getElementById('inputId').value.trim();
+            if(!empIdInput) return alert("Please enter Employee ID.");
+
+            try {
+                const response = await fetch(SHEET_CSV_URL);
+                const csvText = await response.text();
+                const rows = csvText.split(/\r?\n/);
+                
+                let found = false;
+                for(let i = 1; i < rows.length; i++) {
+                    const cols = rows[i].split(','); 
+                    if(cols.length < 4) continue;
+                    
+                    const id = cols[0] ? cols[0].trim().replace(/^"|"$/g, '') : '';
+                    if(id === empIdInput) {
+                        found = true;
+                        
+                        document.getElementById('cardName').innerText = cols[1] ? cols[1].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                        document.getElementById('cardDesignation').innerText = cols[2] ? cols[2].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                        document.getElementById('cardEmpId').innerText = id;
+                        document.getElementById('cardDepartment').innerText = cols[3] ? cols[3].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                        
+                        document.getElementById('cardPhoto').src = 'photos/' + id + '.jpg';
+                        document.getElementById('cardPhoto').onerror = function() {
+                            this.src = 'https://via.placeholder.com/200?text=No+Photo';
+                        }
+                        break;
+                    }
+                }
+                if(!found) alert("Employee ID record not found.");
+            } catch (error) {
+                alert("Network error fetching Google Sheet.");
+            }
+        }
+
+        function downloadCard() {
+            const card = document.getElementById('idCard');
+            const empId = document.getElementById('cardEmpId').innerText;
+            
+            html2canvas(card, { 
+                scale: 4, 
+                useCORS: true, 
+                backgroundColor: null,
+                allowTaint: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `ID_Card_${empId}.png`;
+                link.href = canvas.toDataURL("image/png", 1.0);
+                link.click();
+            });
+        }
+    </script>
+</body>
+</html>
