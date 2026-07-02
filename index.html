@@ -56,8 +56,7 @@
             width: 380px;
             height: 608px;
             position: relative;
-            /* Yahan humne exact PDF/Image ko background bana diya hai */
-            background-image: url('card-bg.jpg');
+            background-image: url('card-bg.jpg'); /* Blank background image from folder */
             background-size: 100% 100%;
             background-position: center;
             background-repeat: no-repeat;
@@ -65,15 +64,15 @@
             background-color: white;
         }
 
-        /* Photo Area - Adjusted to perfectly hide the grey box */
+        /* Photo Area */
         .photo-container {
             position: absolute;
-            top: 114px; /* Aap is value ko kam/zyada kar k up/down set kar saktay hain */
+            top: 114px; 
             left: 50%;
             transform: translateX(-50%);
-            width: 200px; /* Grey box ki exact width */
-            height: 200px; /* Grey box ki exact height */
-            border-radius: 14px; /* Exact rounded corners */
+            width: 200px; 
+            height: 200px; 
+            border-radius: 14px; 
             overflow: hidden;
             z-index: 10;
         }
@@ -87,7 +86,7 @@
         /* Text Section */
         .text-section {
             position: absolute;
-            top: 355px; /* Name aur details ko up/down yahan se karein */
+            top: 355px; 
             width: 100%;
             text-align: center;
             z-index: 10;
@@ -183,15 +182,23 @@
                     const cols = rows[i].split(','); 
                     if(cols.length < 4) continue;
                     
-                    const id = cols[0] ? cols[0].trim().replace(/^"|"$/g, '') : '';
+                    // Aapki sheet ki tarteeb k hisaab se array mapping:
+                    // cols[0] = Name, cols[1] = Designation, cols[2] = Employee ID, cols[3] = Department
+                    
+                    const name = cols[0] ? cols[0].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                    const designation = cols[1] ? cols[1].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                    const id = cols[2] ? cols[2].trim().replace(/^"|"$/g, '') : '';
+                    const department = cols[3] ? cols[3].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                    
                     if(id === empIdInput) {
                         found = true;
                         
-                        document.getElementById('cardName').innerText = cols[1] ? cols[1].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
-                        document.getElementById('cardDesignation').innerText = cols[2] ? cols[2].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                        document.getElementById('cardName').innerText = name;
+                        document.getElementById('cardDesignation').innerText = designation;
                         document.getElementById('cardEmpId').innerText = id;
-                        document.getElementById('cardDepartment').innerText = cols[3] ? cols[3].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
+                        document.getElementById('cardDepartment').innerText = department;
                         
+                        // Photo aapke folder se ID k name say uthayega (e.g. photos/1011.jpg)
                         document.getElementById('cardPhoto').src = 'photos/' + id + '.jpg';
                         document.getElementById('cardPhoto').onerror = function() {
                             this.src = 'https://via.placeholder.com/200?text=No+Photo';
