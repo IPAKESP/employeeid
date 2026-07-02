@@ -100,18 +100,15 @@
             text-transform: uppercase;
             margin: 0;
             letter-spacing: 1px;
-            /* Spacing kam karne ke liye line-height 1 kar di hai */
             line-height: 1; 
         }
 
         .emp-title {
             font-family: 'Fira Sans', sans-serif;
             color: #2b2b2b;
-            /* Font size barha kar 17px kar diya */
             font-size: 19px; 
             font-weight: 600;
             text-transform: uppercase;
-            /* Margin set kar diya taake name k thora aur qareeb ho jaye */
             margin: -2px 0 25px 0; 
             letter-spacing: 0.5px;
         }
@@ -198,7 +195,9 @@
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
                         
-                        document.getElementById('cardPhoto').src = 'photos/' + id + '.jpg';
+                        // Yahan GitHub wala direct link laga diya hai
+                        document.getElementById('cardPhoto').src = 'https://raw.githubusercontent.com/IPAKESP/employeeid/main/ID_Card_System/photos/' + id + '.jpg';
+                        
                         document.getElementById('cardPhoto').onerror = function() {
                             this.src = 'https://via.placeholder.com/200?text=No+Photo';
                         }
