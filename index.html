@@ -56,12 +56,20 @@
             width: 380px;
             height: 608px;
             position: relative;
-            background-image: url('card-bg.jpg'); /* Blank background image from folder */
-            background-size: 100% 100%;
-            background-position: center;
-            background-repeat: no-repeat;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             background-color: white;
+            overflow: hidden; /* Added to keep everything neat inside the card */
+        }
+
+        /* NEW: Background image class */
+        .card-bg-img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 1; /* Keep it behind everything */
+            object-fit: cover;
         }
 
         /* Photo Area */
@@ -81,6 +89,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
+            border-radius: 14px; /* Applied directly to image to fix html2canvas border bug */
         }
 
         /* Text Section */
@@ -142,8 +151,10 @@
 
     <div class="card-container" id="idCard">
         
+        <img class="card-bg-img" src="card-bg.jpg" alt="Background">
+        
         <div class="photo-container">
-            <img id="cardPhoto" src="https://via.placeholder.com/200?text=Photo+Here" alt="Employee Photo">
+            <img id="cardPhoto" src="https://via.placeholder.com/200?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
         </div>
 
         <div class="text-section">
@@ -195,7 +206,7 @@
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
                         
-                        // Yahan GitHub wala direct link laga diya hai
+                        // GitHub direct link setup
                         document.getElementById('cardPhoto').src = 'https://raw.githubusercontent.com/IPAKESP/employeeid/main/ID_Card_System/photos/' + id + '.jpg';
                         
                         document.getElementById('cardPhoto').onerror = function() {
@@ -211,6 +222,9 @@
         }
 
         function downloadCard() {
+            // Scroll completely to top to avoid html2canvas half-blank offset bug
+            window.scrollTo(0, 0); 
+            
             const card = document.getElementById('idCard');
             const empId = document.getElementById('cardEmpId').innerText;
             
@@ -218,7 +232,9 @@
                 scale: 4, 
                 useCORS: true, 
                 backgroundColor: null,
-                allowTaint: true
+                allowTaint: true,
+                scrollX: 0, // Extra protection against scroll offset
+                scrollY: 0  // Extra protection against scroll offset
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `ID_Card_${empId}.png`;
