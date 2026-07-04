@@ -58,29 +58,30 @@
             position: relative;
             box-shadow: 0 10px 30px rgba(0,0,0,0.2);
             background-color: white;
-            overflow: hidden; /* Added to keep everything neat inside the card */
+            overflow: hidden;
         }
 
-        /* NEW: Background image class */
         .card-bg-img {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 1; /* Keep it behind everything */
+            z-index: 1;
             object-fit: cover;
         }
 
-        /* Photo Area */
+        /* --- UPDATED PHOTO AREA --- */
         .photo-container {
             position: absolute;
             top: 114px; 
             left: 50%;
             transform: translateX(-50%);
-            width: 200px; 
-            height: 200px; 
+            width: 190px;  /* Size adjusted for border */
+            height: 190px; 
             border-radius: 14px; 
+            border: 5px solid #387c47; /* Green Border Added Here */
+            box-sizing: border-box; /* Keeps border inside the container */
             overflow: hidden;
             z-index: 10;
         }
@@ -89,7 +90,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 14px; /* Applied directly to image to fix html2canvas border bug */
+            border-radius: 10px; /* Slightly reduced inner radius to match outer border */
         }
 
         /* Text Section */
