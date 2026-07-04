@@ -71,17 +71,17 @@
             object-fit: cover;
         }
 
-        /* --- UPDATED PHOTO AREA --- */
+        /* --- UPDATED PHOTO AREA (Fit inside background border) --- */
         .photo-container {
             position: absolute;
-            top: 114px; 
+            /* Top ko thora neechay kiya hai taake picture border ke andar center ho jaye */
+            top: 121px; 
             left: 50%;
             transform: translateX(-50%);
-            width: 190px;  /* Size adjusted for border */
-            height: 190px; 
-            border-radius: 14px; 
-            border: 5px solid #387c47; /* Green Border Added Here */
-            box-sizing: border-box; /* Keeps border inside the container */
+            /* Width aur Height choti ki hai taake background ka parrot border nazar aaye */
+            width: 186px;  
+            height: 186px; 
+            border-radius: 10px; /* Radius thora adjust kiya */
             overflow: hidden;
             z-index: 10;
         }
@@ -90,7 +90,7 @@
             width: 100%;
             height: 100%;
             object-fit: cover;
-            border-radius: 10px; /* Slightly reduced inner radius to match outer border */
+            border-radius: 10px; 
         }
 
         /* Text Section */
@@ -223,7 +223,6 @@
         }
 
         function downloadCard() {
-            // Scroll completely to top to avoid html2canvas half-blank offset bug
             window.scrollTo(0, 0); 
             
             const card = document.getElementById('idCard');
@@ -234,8 +233,8 @@
                 useCORS: true, 
                 backgroundColor: null,
                 allowTaint: true,
-                scrollX: 0, // Extra protection against scroll offset
-                scrollY: 0  // Extra protection against scroll offset
+                scrollX: 0, 
+                scrollY: 0  
             }).then(canvas => {
                 const link = document.createElement('a');
                 link.download = `ID_Card_${empId}.png`;
