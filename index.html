@@ -74,14 +74,13 @@
         /* --- UPDATED PHOTO AREA (Fit inside background border) --- */
         .photo-container {
             position: absolute;
-            /* Top ko thora neechay kiya hai taake picture border ke andar center ho jaye */
             top: 121px; 
-            left: 50%;
-            transform: translateX(-50%);
-            /* Width aur Height choti ki hai taake background ka parrot border nazar aaye */
+            left: 0;
+            right: 0;
+            margin: 0 auto; /* Center without transform to fix html2canvas bug */
             width: 186px;  
             height: 186px; 
-            border-radius: 10px; /* Radius thora adjust kiya */
+            border-radius: 10px; 
             overflow: hidden;
             z-index: 10;
         }
