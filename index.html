@@ -92,12 +92,14 @@
 
         #cardPhoto {
             position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            /* Photo ko frame ke stroke/border ke peechay chupane ke liye thoda andar kiya hai */
+            top: 2%;       
+            left: 2%;      
+            width: 96%;    
+            height: 96%;   
             object-fit: cover;
-            border-radius: 17px; 
+            /* Aap is border-radius ko apne rec.png ki golayi k hisaab se kam/zyada kar sakte hain */
+            border-radius: 18px; 
             z-index: 1; /* Employee photo piche rahegi */
         }
 
@@ -177,6 +179,7 @@
             <img id="cardPhoto" src="https://via.placeholder.com/300?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
             
             <!-- Border/Frame image -->
+            <!-- Note: Agar rec.png ki direct GitHub link use karni ho to yahan paste kar sakte hain -->
             <img class="photo-frame" src="rec.png" alt="Photo Border" crossorigin="anonymous">
         </div>
 
