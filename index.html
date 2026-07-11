@@ -78,7 +78,7 @@
             object-fit: cover;
         }
 
-        /* --- UPDATED PHOTO AREA --- */
+        /* --- UPDATED PHOTO AREA WITH FRAME --- */
         .photo-container {
             position: absolute;
             top: 171px; /* Scaled down proportionally */
@@ -87,16 +87,28 @@
             margin: 0 auto;
             width: 270px;   
             height: 270px;  
-            border-radius: 17px; 
-            overflow: hidden;
             z-index: 10;
         }
 
-        .photo-container img {
+        #cardPhoto {
+            position: absolute;
+            top: 0;
+            left: 0;
             width: 100%;
             height: 100%;
             object-fit: cover;
             border-radius: 17px; 
+            z-index: 1; /* Employee photo piche rahegi */
+        }
+
+        .photo-frame {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 2; /* Border/frame uper aayega */
+            pointer-events: none; /* Mouse clicks isko block nahi karenge */
         }
 
         /* Text Section */
@@ -158,10 +170,14 @@
 
     <div class="card-container" id="idCard">
         
-        <img class="card-bg-img" src="card-bg.jpg" alt="Background">
+        <img class="card-bg-img" src="card-bg.jpg" alt="Background" crossorigin="anonymous">
         
         <div class="photo-container">
+            <!-- Employee Photo -->
             <img id="cardPhoto" src="https://via.placeholder.com/300?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
+            
+            <!-- Border/Frame image -->
+            <img class="photo-frame" src="rec.png" alt="Photo Border" crossorigin="anonymous">
         </div>
 
         <div class="text-section">
@@ -213,7 +229,7 @@
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
                         
-                        // GitHub direct link setup
+                        // GitHub direct link setup for employee photo
                         document.getElementById('cardPhoto').src = 'https://raw.githubusercontent.com/IPAKESP/employeeid/main/ID_Card_System/photos/' + id + '.jpg';
                         
                         document.getElementById('cardPhoto').onerror = function() {
@@ -235,7 +251,7 @@
             const empId = document.getElementById('cardEmpId').innerText;
             
             html2canvas(card, { 
-                scale: 6, // Changed to 6 for True 4K+ quality (Approx 3240x5160 pixels)
+                scale: 6, // 4K+ quality
                 useCORS: true, 
                 backgroundColor: null,
                 allowTaint: true,
