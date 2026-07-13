@@ -172,14 +172,14 @@
 
     <div class="card-container" id="idCard">
         
-        <img class="card-bg-img" src="card-bg.jpg" alt="Background" crossorigin="anonymous">
+        <!-- Yahan par id="cardBg" add kiya gaya hai -->
+        <img class="card-bg-img" id="cardBg" src="ipak_group.jpg" alt="Background" crossorigin="anonymous">
         
         <div class="photo-container">
             <!-- Employee Photo -->
             <img id="cardPhoto" src="https://via.placeholder.com/300?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
             
             <!-- Border/Frame image -->
-            <!-- Note: Agar rec.png ki direct GitHub link use karni ho to yahan paste kar sakte hain -->
             <img class="photo-frame" src="rec.png" alt="Photo Border" crossorigin="anonymous">
         </div>
 
@@ -224,6 +224,9 @@
                     const id = cols[2] ? cols[2].trim().replace(/^"|"$/g, '') : '';
                     const department = cols[3] ? cols[3].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
                     
+                    // Assumed company is in the 5th column (Index 4). Agar index change ho tou yahan update karein.
+                    const company = cols[4] ? cols[4].trim().replace(/^"|"$/g, '').toLowerCase() : 'ipak_group'; 
+                    
                     if(id === empIdInput) {
                         found = true;
                         
@@ -231,6 +234,14 @@
                         document.getElementById('cardDesignation').innerText = designation;
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
+                        
+                        // Background image dynamically set ho rahi hai
+                        const bgImageName = company + '.jpg';
+                        document.getElementById('cardBg').src = bgImageName;
+                        // Default error handling for background
+                        document.getElementById('cardBg').onerror = function() {
+                            this.src = 'ipak_group.jpg'; // agar image na mile tou default lag jaye
+                        }
                         
                         // GitHub direct link setup for employee photo
                         document.getElementById('cardPhoto').src = 'https://raw.githubusercontent.com/IPAKESP/employeeid/main/ID_Card_System/photos/' + id + '.jpg';
