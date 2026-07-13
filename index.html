@@ -150,40 +150,39 @@
             box-sizing: border-box;
         }
 
-        /* --- UPDATED DETAILS TABLE FOR PERFECT WRAPPING --- */
+        /* --- UPDATED DETAILS TABLE --- */
         .details-table {
-            margin: 0 auto;
-            text-align: left;
+            margin: 0 auto; /* Table hamesha center me rahega */
+            text-align: left; /* Table ke andar text left aligned rahega */
             font-size: 21px; 
             color: #333;
             border-spacing: 0 11px; 
-            width: 440px; /* Card is 540px, giving 50px gap on left/right */
+            /* Fixed width hata di taake chota text bilkul center me aye */
         }
 
         .details-table td {
-            vertical-align: top; /* Text hamesha top se shuru hoga */
-            padding: 0; /* Extra space remove kar di */
+            vertical-align: top; /* Text ko top se shuru karega */
+            padding: 0 6px; /* Halki si space rakhi hai */
         }
 
         /* 1st Column (Labels like "Department") */
         .details-table td:first-child {
             font-weight: 700;
             color: #2b2b2b;
-            width: 130px; 
-            white-space: nowrap;
+            white-space: nowrap; /* Ye line break nahi hogi */
         }
 
         /* 2nd Column (Colon ':') */
         .details-table td:nth-child(2) {
-            width: 20px;
             text-align: center;
+            white-space: nowrap;
         }
 
-        /* 3rd Column (Values) - Breaks automatically for long names */
+        /* 3rd Column (Values) */
         .details-table td:last-child {
-            width: 290px;
+            max-width: 260px; /* Sirf limit lagai hai, agar naam chota hai to column bhi chota rahega */
             white-space: normal;
-            word-wrap: break-word;
+            word-wrap: break-word; /* Lambay naam ko automatically break karega */
             line-height: 1.2;
         }
     </style>
