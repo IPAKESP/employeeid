@@ -150,28 +150,38 @@
             box-sizing: border-box;
         }
 
-        /* Details Table */
+        /* --- UPDATED DETAILS TABLE FOR PERFECT WRAPPING --- */
         .details-table {
             margin: 0 auto;
             text-align: left;
             font-size: 21px; 
             color: #333;
             border-spacing: 0 11px; 
+            width: 440px; /* Card is 540px, giving 50px gap on left/right */
         }
 
         .details-table td {
-            padding: 0 10px;
-            vertical-align: top; /* Update: Keeps label aligned to top if text is multi-line */
+            vertical-align: top; /* Text hamesha top se shuru hoga */
+            padding: 0; /* Extra space remove kar di */
         }
 
+        /* 1st Column (Labels like "Department") */
         .details-table td:first-child {
             font-weight: 700;
             color: #2b2b2b;
+            width: 130px; 
+            white-space: nowrap;
         }
 
-        /* Update: Force long department names to wrap into 2 lines */
-        #cardDepartment {
-            max-width: 260px;
+        /* 2nd Column (Colon ':') */
+        .details-table td:nth-child(2) {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* 3rd Column (Values) - Breaks automatically for long names */
+        .details-table td:last-child {
+            width: 290px;
             white-space: normal;
             word-wrap: break-word;
             line-height: 1.2;
