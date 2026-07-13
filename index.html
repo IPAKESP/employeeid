@@ -92,7 +92,7 @@
 
         #cardPhoto {
             position: absolute;
-            /* Update: Set to 0 and 100% takay picture frame k poora pichay tak jaye */
+            /* Set to 0 and 100% takay picture frame k poora pichay tak jaye */
             top: 0;        
             left: 0;       
             width: 100%;    
@@ -178,8 +178,8 @@
             <!-- Employee Photo -->
             <img id="cardPhoto" src="https://via.placeholder.com/300?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
             
-            <!-- Border/Frame image -->
-            <img class="photo-frame" src="rec.png" alt="Photo Border" crossorigin="anonymous">
+            <!-- Border/Frame image - ID ADD KIYA HAI TAAKE JS SE CHANGE HO SAKEY -->
+            <img class="photo-frame" id="photoFrame" src="rec_ipak.png" alt="Photo Border" crossorigin="anonymous">
         </div>
 
         <div class="text-section">
@@ -230,17 +230,23 @@
                         found = true;
                         
                         const nameEl = document.getElementById('cardName');
+                        const frameEl = document.getElementById('photoFrame'); // Frame target
                         nameEl.innerText = name;
                         
-                        // --- DYNAMIC NAME COLOR LOGIC ---
+                        // --- DYNAMIC NAME COLOR & FRAME LOGIC ---
                         if (company === 'gpak') {
                             nameEl.style.color = '#1f396c';
+                            frameEl.src = 'rec_gpak.png';
                         } else if (company === 'cpak') {
                             nameEl.style.color = '#c42d35';
+                            frameEl.src = 'rec_cpak.png';
                         } else if (company === 'petpak') {
                             nameEl.style.color = '#f36c35';
+                            frameEl.src = 'rec_petpak.png';
                         } else {
+                            // Defaults for 'ipak' or 'ipak_group' or any unknown company
                             nameEl.style.color = '#3f7b47'; // Default Green
+                            frameEl.src = 'rec_ipak.png';
                         }
                         
                         document.getElementById('cardDesignation').innerText = designation;
@@ -253,6 +259,11 @@
                         // Default error handling for background
                         document.getElementById('cardBg').onerror = function() {
                             this.src = 'ipak_group.jpg'; 
+                        }
+                        
+                        // Error handling for frame (in case exact frame isn't uploaded yet)
+                        frameEl.onerror = function() {
+                            this.src = 'rec_ipak.png'; 
                         }
                         
                         // GitHub direct link setup for employee photo
