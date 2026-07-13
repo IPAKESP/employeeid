@@ -59,7 +59,6 @@
 
         /* --- 54x86 ASPECT RATIO EXACT CARD DESIGN --- */
         .card-container {
-            /* 54mm x 86mm ratio scaled up for high-res web rendering */
             width: 540px; 
             height: 860px; 
             position: relative;
@@ -78,10 +77,9 @@
             object-fit: cover;
         }
 
-        /* --- UPDATED PHOTO AREA WITH FRAME --- */
         .photo-container {
             position: absolute;
-            top: 171px; /* Scaled down proportionally */
+            top: 171px; 
             left: 0;
             right: 0;
             margin: 0 auto;
@@ -92,14 +90,13 @@
 
         #cardPhoto {
             position: absolute;
-            /* Set to 0 and 100% takay picture frame k poora pichay tak jaye */
             top: 0;        
             left: 0;       
             width: 100%;    
             height: 100%;   
             object-fit: cover;
             border-radius: 18px; 
-            z-index: 1; /* Employee photo piche rahegi */
+            z-index: 1; 
         }
 
         .photo-frame {
@@ -108,14 +105,14 @@
             left: 0;
             width: 100%;
             height: 100%;
-            z-index: 2; /* Border/frame uper aayega */
-            pointer-events: none; /* Mouse clicks isko block nahi karenge */
+            z-index: 2; 
+            pointer-events: none; 
         }
 
         /* Text Section */
         .text-section {
             position: absolute;
-            top: 502px; /* Scaled down proportionally */
+            top: 502px; 
             width: 100%;
             text-align: center;
             z-index: 10;
@@ -123,14 +120,20 @@
 
         .emp-name {
             font-family: 'Bebas Neue', sans-serif;
-            color: #3f7b47; /* Default green, will be overridden by JS */
+            color: #3f7b47; 
             font-size: 65px; 
             font-weight: 400;
             text-transform: uppercase;
             margin: 0;
             letter-spacing: 1.5px;
             line-height: 1; 
-            transition: color 0.3s ease; /* Smooth color transition */
+            transition: color 0.3s ease;
+            /* Update: One line force + Padding for safety */
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
         .emp-title {
@@ -141,6 +144,12 @@
             text-transform: uppercase;
             margin: -2px 0 35px 0; 
             letter-spacing: 0.5px;
+            /* Update: One line force + Padding for safety */
+            white-space: nowrap;
+            overflow: hidden;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
         }
 
         /* Details Table */
@@ -177,8 +186,7 @@
         <div class="photo-container">
             <!-- Employee Photo -->
             <img id="cardPhoto" src="https://via.placeholder.com/300?text=Photo+Here" alt="Employee Photo" crossorigin="anonymous">
-            
-            <!-- Border/Frame image - ID ADD KIYA HAI TAAKE JS SE CHANGE HO SAKEY -->
+            <!-- Border/Frame image -->
             <img class="photo-frame" id="photoFrame" src="rec_ipak.png" alt="Photo Border" crossorigin="anonymous">
         </div>
 
@@ -203,6 +211,18 @@
 
     <script>
         const SHEET_CSV_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRnbrul58r8BMQrtwQUQrMG1lFv9EMJubGGnCSDOrO-41l2z2j2VhM3NraYEenbGT5rxuL3AN0qVbvl/pub?output=csv';
+
+        // Function to auto-shrink text so it fits on one line
+        function autoShrink(element, defaultFontSize) {
+            element.style.fontSize = defaultFontSize + 'px'; // Reset to default first
+            let currentSize = defaultFontSize;
+            
+            // Jab tak text container se bahar nikal raha hai, font chota karte raho
+            while (element.scrollWidth > element.clientWidth && currentSize > 12) {
+                currentSize--;
+                element.style.fontSize = currentSize + 'px';
+            }
+        }
 
         async function generateCard() {
             const empIdInput = document.getElementById('inputId').value.trim();
@@ -230,8 +250,11 @@
                         found = true;
                         
                         const nameEl = document.getElementById('cardName');
-                        const frameEl = document.getElementById('photoFrame'); // Frame target
+                        const desigEl = document.getElementById('cardDesignation');
+                        const frameEl = document.getElementById('photoFrame'); 
+                        
                         nameEl.innerText = name;
+                        desigEl.innerText = designation;
                         
                         // --- DYNAMIC NAME COLOR & FRAME LOGIC ---
                         if (company === 'gpak') {
@@ -244,12 +267,14 @@
                             nameEl.style.color = '#f36c35';
                             frameEl.src = 'rec_petpak.png';
                         } else {
-                            // Defaults for 'ipak' or 'ipak_group' or any unknown company
                             nameEl.style.color = '#3f7b47'; // Default Green
                             frameEl.src = 'rec_ipak.png';
                         }
+
+                        // Text laganay ke baad Auto-Shrink chalayen (taky 1 line me fit ho)
+                        autoShrink(nameEl, 65);
+                        autoShrink(desigEl, 27);
                         
-                        document.getElementById('cardDesignation').innerText = designation;
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
                         
@@ -261,7 +286,7 @@
                             this.src = 'ipak_group.jpg'; 
                         }
                         
-                        // Error handling for frame (in case exact frame isn't uploaded yet)
+                        // Error handling for frame
                         frameEl.onerror = function() {
                             this.src = 'rec_ipak.png'; 
                         }
