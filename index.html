@@ -92,13 +92,12 @@
 
         #cardPhoto {
             position: absolute;
-            /* Photo ko frame ke stroke/border ke peechay chupane ke liye thoda andar kiya hai */
-            top: 2%;       
-            left: 2%;      
-            width: 96%;    
-            height: 96%;   
+            /* Update: Set to 0 and 100% takay picture frame k poora pichay tak jaye */
+            top: 0;        
+            left: 0;       
+            width: 100%;    
+            height: 100%;   
             object-fit: cover;
-            /* Aap is border-radius ko apne rec.png ki golayi k hisaab se kam/zyada kar sakte hain */
             border-radius: 18px; 
             z-index: 1; /* Employee photo piche rahegi */
         }
@@ -124,13 +123,14 @@
 
         .emp-name {
             font-family: 'Bebas Neue', sans-serif;
-            color: #3f7b47;
-            font-size: 65px; /* Scaled for 540px width */
+            color: #3f7b47; /* Default green, will be overridden by JS */
+            font-size: 65px; 
             font-weight: 400;
             text-transform: uppercase;
             margin: 0;
             letter-spacing: 1.5px;
             line-height: 1; 
+            transition: color 0.3s ease; /* Smooth color transition */
         }
 
         .emp-title {
@@ -147,7 +147,7 @@
         .details-table {
             margin: 0 auto;
             text-align: left;
-            font-size: 21px; /* Scaled up */
+            font-size: 21px; 
             color: #333;
             border-spacing: 0 11px; 
         }
@@ -172,7 +172,6 @@
 
     <div class="card-container" id="idCard">
         
-        <!-- Yahan par id="cardBg" add kiya gaya hai -->
         <img class="card-bg-img" id="cardBg" src="ipak_group.jpg" alt="Background" crossorigin="anonymous">
         
         <div class="photo-container">
@@ -224,23 +223,36 @@
                     const id = cols[2] ? cols[2].trim().replace(/^"|"$/g, '') : '';
                     const department = cols[3] ? cols[3].trim().replace(/^"|"$/g, '') : 'UNKNOWN';
                     
-                    // Assumed company is in the 5th column (Index 4). Agar index change ho tou yahan update karein.
+                    // Assumed company is in the 5th column (Index 4)
                     const company = cols[4] ? cols[4].trim().replace(/^"|"$/g, '').toLowerCase() : 'ipak_group'; 
                     
                     if(id === empIdInput) {
                         found = true;
                         
-                        document.getElementById('cardName').innerText = name;
+                        const nameEl = document.getElementById('cardName');
+                        nameEl.innerText = name;
+                        
+                        // --- DYNAMIC NAME COLOR LOGIC ---
+                        if (company === 'gpak') {
+                            nameEl.style.color = '#1f396c';
+                        } else if (company === 'cpak') {
+                            nameEl.style.color = '#c42d35';
+                        } else if (company === 'petpak') {
+                            nameEl.style.color = '#f36c35';
+                        } else {
+                            nameEl.style.color = '#3f7b47'; // Default Green
+                        }
+                        
                         document.getElementById('cardDesignation').innerText = designation;
                         document.getElementById('cardEmpId').innerText = id;
                         document.getElementById('cardDepartment').innerText = department;
                         
-                        // Background image dynamically set ho rahi hai
+                        // Background image dynamically set
                         const bgImageName = company + '.jpg';
                         document.getElementById('cardBg').src = bgImageName;
                         // Default error handling for background
                         document.getElementById('cardBg').onerror = function() {
-                            this.src = 'ipak_group.jpg'; // agar image na mile tou default lag jaye
+                            this.src = 'ipak_group.jpg'; 
                         }
                         
                         // GitHub direct link setup for employee photo
